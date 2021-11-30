@@ -65,7 +65,6 @@ class SalesServiceTest {
 
     }
 
-
     @Test
     @DisplayName("Test successful decimal conversion")
     public void test_billing() throws IOException {
