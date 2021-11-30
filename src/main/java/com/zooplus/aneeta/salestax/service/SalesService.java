@@ -34,9 +34,9 @@ public class SalesService {
         Map<String, Item> billingMap = new HashMap<>();
         while (proceed) {
 
-
-            System.out.println("Please select the item number");
+            System.out.println("List of Items :");
             System.out.println(items);
+            System.out.println("Please select an item number");
             String itemId = scanner.next();
             Item selectedItem = itemMap.get(itemId);
             if (null == selectedItem) {
