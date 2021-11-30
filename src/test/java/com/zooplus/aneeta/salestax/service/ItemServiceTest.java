@@ -10,13 +10,15 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
+import java.util.NoSuchElementException;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
@@ -30,10 +32,8 @@ class ItemServiceTest {
 
     @BeforeEach
     void setUp() {
-       // itemService = new ItemService(itemDomain);
 
     }
-
 
     @Test
     public void Should_return_items() throws IOException {
@@ -49,5 +49,14 @@ class ItemServiceTest {
 
         //then
         Assertions.assertNotNull(fullItems);
+    }
+
+    @Test
+    public void Should_throw_exception_when_file_not_available() throws IOException {
+        //given
+        when(itemDomain.getItems()).thenThrow(FileNotFoundException.class);
+
+        //then
+        assertThrows(IOException.class, () -> itemService.getItems());
     }
 }

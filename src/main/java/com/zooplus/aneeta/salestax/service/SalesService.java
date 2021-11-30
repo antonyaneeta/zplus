@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 @Service
@@ -85,31 +86,21 @@ public class SalesService {
     }
 
     private void generateBill(Map<String, Item> billingMap) {
-        Double salesTaxAmount = 0.0d;
-        Double billPrice = 0.0d;
 
-        for (Map.Entry<String, Item> itemEntry : billingMap.entrySet()) {
-            Item item = itemEntry.getValue();
-            Double totalPrice = new BigDecimal(item.getQuantity() * item.getPrice()).setScale(2, RoundingMode.HALF_UP).doubleValue();
-            item.setTotalPrice(totalPrice);
+        AtomicReference<Double> billPrice = new AtomicReference<>(0.0d);
+        AtomicReference<Double> salesTaxAmount = new AtomicReference<>(0.0d);
 
-            if (Boolean.TRUE.equals(!item.getExemptFrmTax())) {
-                Double taxAmount = totalPrice * SALES_TAX / 100;
-                salesTaxAmount = getaDouble(salesTaxAmount, item, taxAmount);
-            }
-            if (item.isImported()) {
-                Double taxAmount = totalPrice * IMPORT_TAX / 100;
-                salesTaxAmount = getaDouble(salesTaxAmount, item, taxAmount);
-            }
-            billPrice = new BigDecimal(billPrice + item.getTotalPrice()).setScale(2, RoundingMode.HALF_UP).doubleValue();
-            System.out.println(item.getQuantity() + " " + (item.isImported() ? "imported " : "") + item.getItemName() + " : " + df.format(item.getTotalPrice()));
-        }
-        System.out.println("SalesTaxes : " + df.format(salesTaxAmount));
-        System.out.println("Total : " + df.format(billPrice));
+        billingMap.forEach(((s, item) -> {Double salesTax= calculateTax(item);
+            salesTaxAmount.set(new BigDecimal(salesTaxAmount.get()+salesTax).setScale(2,RoundingMode.HALF_UP).doubleValue());
+            billPrice.set(new BigDecimal(billPrice.get() + item.getTotalPrice()).setScale(2, RoundingMode.HALF_UP).doubleValue());
+        }));
+
+        System.out.println("SalesTaxes : " + df.format(salesTaxAmount.get()));
+        System.out.println("Total : " + df.format(billPrice.get()));
 
     }
 
-    private Double getaDouble(Double salesTaxAmount, Item item, Double taxAmount) {
+    public Double getaDouble(Double salesTaxAmount, Item item, Double taxAmount) {
         Double roundedDbl = roundOff(new BigDecimal(taxAmount).setScale(2, RoundingMode.HALF_UP).doubleValue());
         salesTaxAmount = new BigDecimal(salesTaxAmount + roundedDbl).setScale(2, RoundingMode.HALF_UP).doubleValue();
         item.setTotalPrice((new BigDecimal(item.getTotalPrice() + roundedDbl).setScale(2, RoundingMode.HALF_UP).doubleValue()));
@@ -124,6 +115,23 @@ public class SalesService {
         newValue = value + 0.05 - reminder;
 
         return newValue;
+    }
+
+    private Double calculateTax(Item item){
+        Double salesTaxAmount=0.0d;
+        Double totalPrice = new BigDecimal(item.getQuantity() * item.getPrice()).setScale(2, RoundingMode.HALF_UP).doubleValue();
+        item.setTotalPrice(totalPrice);
+
+        if (Boolean.TRUE.equals(!item.getExemptFrmTax())) {
+            Double taxAmount = totalPrice * SALES_TAX / 100;
+            salesTaxAmount = getaDouble(salesTaxAmount, item, taxAmount);
+        }
+        if (item.isImported()) {
+            Double taxAmount = totalPrice * IMPORT_TAX / 100;
+            salesTaxAmount = getaDouble(salesTaxAmount, item, taxAmount);
+        }
+        System.out.println(item.getQuantity() + " " + (item.isImported() ? "imported " : "") + item.getItemName() + " : " + df.format(item.getTotalPrice()));
+        return salesTaxAmount;
     }
 
 }
