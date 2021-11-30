@@ -1,0 +1,83 @@
+[
+  {
+    "itemId"   : "1",
+    "itemName" : "Book",
+    "category" : "Books",
+    "exemptFrmTax" : true,
+    "imported" : false,
+    "price" : 12.49
+  },
+  {
+    "itemId"   : "2",
+    "itemName" : "Music CD",
+    "category" : "Entertainment",
+    "exemptFrmTax" : false,
+    "imported" : false,
+    "price" : 14.99
+  },
+  {
+    "itemId"   : "3",
+    "itemName" : "Perfume",
+    "category" : "Cosmetics",
+    "exemptFrmTax" : false,
+    "imported" : true,
+    "price" : 47.50
+  },
+
+  {
+    "itemId"   : "4",
+    "itemName" : "box of chocolates",
+    "category" : "Food",
+    "exemptFrmTax" : true,
+    "imported" : true,
+    "price" : 10.00
+  },
+  {
+    "itemId"   : "5",
+    "itemName" : "Chocolate",
+    "category" : "Food",
+    "exemptFrmTax" : true,
+    "imported" : false,
+    "price" : 0.85
+  },
+  {
+    "itemId"   : "6",
+    "itemName" : "yogurt",
+    "category" : "Food",
+    "exemptFrmTax" : true,
+    "imported" : false,
+    "price" : 20.30
+  },
+  {
+    "itemId"   : "7",
+    "itemName" : "bottle of perfume",
+    "category" : "Cosmetics",
+    "exemptFrmTax" : false,
+    "imported" : true,
+    "price" : 27.99
+  },
+  {
+    "itemId"   : "8",
+    "itemName" : "bottle of perfume",
+    "category" : "Cosmetics",
+    "exemptFrmTax" : false,
+    "imported" : false,
+    "price" : 18.99
+  },
+  {
+    "itemId"   : "9",
+    "itemName" : "headache pills",
+    "category" : "medicine",
+    "exemptFrmTax" : true,
+    "imported" : false,
+    "price" : 9.75
+  },
+  {
+    "itemId"   : "10",
+    "itemName" : "box of chocolates",
+    "category" : "Food",
+    "exemptFrmTax" : true,
+    "imported" : true,
+    "price" : 11.25
+  }
+]
